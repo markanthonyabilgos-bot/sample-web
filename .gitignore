@@ -1,0 +1,18 @@
+# deps
+node_modules/
+# next
+.next/
+out/
+# env
+.env*.local
+.env.local
+# logs
+*.log
+npm-debug.log*
+# os / ide
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+# vercel
+.vercel
