@@ -96,8 +96,14 @@ function InboxView({ rsvps, inbox, onDel }) {
         <div className="space-y-2 mt-2">
           {inbox.map((c, i) => (
             <div key={c.id || i} className="text-sm border border-teal-100 bg-white rounded-lg p-2">
-              <div className="flex justify-between items-center"><b>{c.name}</b><button onClick={() => onDel("/api/contact", c.id || c.at)} className="text-red-600 border px-2 py-0.5 rounded-full text-xs">Delete</button></div>
-              <p className="text-slate-600">{c.message}</p>
+              <div className="flex justify-between items-center gap-2"><b>{c.name}</b><button onClick={() => onDel("/api/contact", c.id || c.at)} className="text-red-600 border px-2 py-0.5 rounded-full text-xs">Delete</button></div>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {c.tour ? <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-700 text-white">TOUR REQUESTED</span> : <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">APPLICATION</span>}
+                {c.grade && <span className="text-[10px] px-2 py-0.5 rounded-full border border-teal-200 text-teal-900">{c.grade}</span>}
+                {c.club && <span className="text-[10px] px-2 py-0.5 rounded-full border border-teal-200 text-teal-900">{c.club}</span>}
+                {c.at && <span className="text-[10px] text-slate-500">{new Date(c.at).toLocaleString()}</span>}
+              </div>
+              <p className="text-slate-600 mt-1">{c.message}</p>
             </div>
           ))}
           {inbox.length === 0 && <p className="text-sm text-slate-500">No messages yet.</p>}
