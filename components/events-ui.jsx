@@ -28,11 +28,11 @@ export default function EventsUI() {
     <div className="max-w-6xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-teal-950">Events <span className="live-dot ml-1" /> <span className="text-xs font-normal text-teal-600">live</span></h1>
       {next && cd && (
-        <div className="mt-4 border border-amber-200 bg-amber-50 rounded-xl p-4 flex flex-wrap items-center gap-4">
+        <div className="mt-4 border border-teal-200 bg-teal-50 rounded-xl p-4 flex flex-wrap items-center gap-4">
           <div className="text-sm"><b>Next up: {next.title}</b> <span className="text-slate-600">· {next.date} @ {next.place}</span></div>
           <div className="flex gap-2 ml-auto">
             {[["Days", cd.d], ["Hrs", cd.h], ["Min", cd.m], ["Sec", cd.s]].map(([l, v]) => (
-              <div key={l} className="bg-white border border-amber-200 rounded-lg px-3 py-1 text-center"><b className="text-lg text-teal-900">{String(v).padStart(2, "0")}</b><p className="text-[10px] text-slate-500">{l}</p></div>
+              <div key={l} className="bg-white border border-teal-200 rounded-lg px-3 py-1 text-center"><b className="text-lg text-teal-900">{String(v).padStart(2, "0")}</b><p className="text-[10px] text-slate-500">{l}</p></div>
             ))}
           </div>
         </div>

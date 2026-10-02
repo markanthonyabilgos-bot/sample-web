@@ -36,7 +36,7 @@ export default function Leaderboard() {
             {rows.topFans.map(([name, n], i) => (
               <li key={name} className="flex justify-between items-center">
                 <span>{["🥇", "🥈", "🥉"][i] || "•"} <b>{name}</b> <span className="text-slate-400">· {n} RSVP(s)</span></span>
-                {badgeFor(n) && <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">{badgeFor(n)}</span>}
+                {badgeFor(n) && <span className="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold">{badgeFor(n)}</span>}
               </li>
             ))}
           </ul>

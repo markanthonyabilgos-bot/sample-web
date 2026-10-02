@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Reveal, Skeleton } from "@/components/fx";
 import Reactions from "@/components/reactions";
-const badgeColors = { General: "bg-teal-100 text-teal-800", Event: "bg-blue-100 text-blue-800", Urgent: "bg-red-100 text-red-700", Sports: "bg-green-100 text-green-800", Arts: "bg-purple-100 text-purple-800" };
+const badgeColors = { General: "bg-teal-100 text-teal-800", Event: "bg-teal-700 text-white", Urgent: "bg-pine text-white", Sports: "bg-mint text-pine", Arts: "bg-teal-50 text-teal-900 border border-teal-200" };
 function isNew(dateStr) {
   if (!dateStr) return false;
   const d = new Date(dateStr + "T00:00:00").getTime();
@@ -23,12 +23,12 @@ export default function NewsUI() {
       {!news && <div className="space-y-3 mt-4"><Skeleton /><Skeleton /><Skeleton /></div>}
       {(news || []).map((a, i) => (
         <Reveal key={a.id} delay={Math.min(i * 0.04, 0.3)}>
-          <article className={"card-lift border rounded-xl px-4 my-3 py-4 " + (a.pinned ? "border-amber-300 bg-amber-50" : "border-teal-100 bg-white")}>
+          <article className={"card-lift border rounded-xl px-4 my-3 py-4 " + (a.pinned ? "border-teal-300 bg-teal-50" : "border-teal-100 bg-white")}>
             <div className="flex items-center gap-2 flex-wrap">
               <p className="text-xs text-teal-700/70">{a.date}</p>
               <span className={"text-[10px] font-bold px-2 py-0.5 rounded-full " + (badgeColors[a.category] || badgeColors.General)}>{(a.category || "General").toUpperCase()}</span>
-              {a.pinned && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400 text-amber-950">PINNED</span>}
-              {isNew(a.date) && <span className="new-pulse text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-400 text-emerald-950">NEW</span>}
+              {a.pinned && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-700 text-white">PINNED</span>}
+              {isNew(a.date) && <span className="new-pulse text-[10px] font-bold px-2 py-0.5 rounded-full bg-mint text-pine">NEW</span>}
             </div>
             <h2 className="font-bold text-teal-900 mt-1">{a.title}</h2>
             <p className="text-sm text-slate-700 mt-1">{a.body}</p>

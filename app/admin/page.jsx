@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import EventsPanel from "./panel-events";
 import NewsPanel from "./panel-news";
 import MorePanels from "./panel-more";
@@ -22,7 +21,6 @@ export const inputCls = "border border-teal-200 rounded-lg px-2 py-1.5 text-sm w
 export const btnP = "btn-pop bg-teal-700 text-white px-3 py-1.5 rounded-full text-sm font-semibold";
 export const btnG = "btn-pop border border-teal-200 bg-white px-3 py-1.5 rounded-full text-sm";
 export default function Admin() {
-  const router = useRouter();
   const [tab, setTab] = useState("dashboard");
   const [events, setEvents] = useState([]);
   const [news, setNews] = useState([]);
@@ -55,28 +53,24 @@ export default function Admin() {
     finally { setLoading(false); }
   };
   useEffect(() => {
-    fetch("/api/admin/me").then((r) => r.json()).then((d) => {
-      if (!d.admin) router.replace("/login?next=/admin");
-      else loadAll();
-    }).catch(() => router.replace("/login?next=/admin"));
+    loadAll();
   }, []);
   const nextEv = useMemo(() => {
     const t = new Date().toISOString().slice(0, 10);
     return [...events].filter((e) => e.date >= t).sort((a, b) => String(a.date).localeCompare(String(b.date)))[0];
   }, [events]);
-  async function logout() { await fetch("/api/admin/logout", { method: "POST" }); router.replace("/login"); }
   async function del(path, id) {
     if (!confirm("Delete?")) return;
     try { await api(path + "?id=" + id, { method: "DELETE" }); toast("Deleted"); loadAll(); }
     catch (err) { toast(err.message, true); }
   }
-  if (loading) return <div className="max-w-5xl mx-auto px-4 py-10 text-sm text-slate-500">Checking admin session…</div>;
+  if (loading) return <div className="max-w-5xl mx-auto px-4 py-10 text-sm text-slate-500">Loading…</div>;
   const tabs = [["dashboard", "Dashboard"], ["events", "Events (" + events.length + ")"], ["news", "News (" + news.length + ")"], ["clubs", "Clubs (" + orgs.length + ")"], ["gallery", "Gallery (" + gallery.length + ")"], ["polls", "Polls (" + polls.length + ")"], ["inbox", "Inbox (" + (rsvps.length + inbox.length) + ")"]];
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h1 className="text-3xl font-bold text-teal-950">Admin Dashboard <span className="text-xs font-normal text-teal-600">live</span></h1>
-        <div className="flex gap-2"><button onClick={loadAll} className={btnG}>Refresh</button><button onClick={logout} className={btnG}>Logout</button></div>
+        <div className="flex gap-2"><button onClick={loadAll} className={btnG}>Refresh</button></div>
       </div>
       <div className="flex gap-2 mt-4 flex-wrap">
         {tabs.map(([k, label]) => (

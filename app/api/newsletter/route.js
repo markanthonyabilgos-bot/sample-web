@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { addSubscriberDB, getSubscribers } from "@/lib/store";
-import { isAdminRequest } from "@/lib/auth";
-export async function GET(req) {
-  if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function GET() {
   return NextResponse.json({ subscribers: await getSubscribers() });
 }
 export async function POST(req) {

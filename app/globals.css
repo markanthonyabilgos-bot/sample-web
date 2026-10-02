@@ -41,6 +41,12 @@ body { @apply bg-teal-50/60 text-slate-800; }
 ::-webkit-scrollbar-thumb { background: #0e7c6b; border-radius: 99px; border: 2px solid #e6f4f1; }
 ::-webkit-scrollbar-thumb:hover { background: #14b8a6; }
 
+/* accessibility: visible keyboard focus + reduced motion */
+:focus-visible { outline: 2px solid #0e7c6b; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .teal-hero, .hero-blob, .float-soft, .live-dot, .new-pulse, .page-enter, .btn-pop, .card-lift { animation: none !important; transition: none !important; }
+}
+
 /* dark mode (class toggle) */
 .dark body, .dark main { background: #062521; color: #d7efe9; }
 .dark .card-lift, .dark .bg-white { background-color: #0a3833 !important; border-color: #134e4a !important; color: #d7efe9; }

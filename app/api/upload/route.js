@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSupabase } from "@/lib/supabaseServer";
-import { isAdminRequest } from "@/lib/auth";
 import { uid, addGalleryDB } from "@/lib/store";
 
 export async function POST(req) {
-  if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const form = await req.formData().catch(() => null);
   if (!form) return NextResponse.json({ error: "No file" }, { status: 400 });
   const file = form.get("file");

@@ -23,15 +23,21 @@ export default function SiteSearch() {
   }, [q, data]);
   return (
     <div className="relative">
+      <label htmlFor="site-search" className="sr-only">Search programs, events, news</label>
       <input
+        id="site-search"
+        type="search"
         value={q}
         onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+        onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
-        placeholder="Search clubs, events, news…"
-        className="border border-white/30 bg-white/10 placeholder-white/50 rounded-full px-3 py-1 text-xs w-44 md:w-56 outline-none focus:bg-white/20"
+        placeholder="Search programs, events, news…"
+        aria-expanded={open && results.length > 0}
+        aria-controls="site-search-results"
+        className="border border-white/30 bg-white/10 placeholder-white/50 rounded-full px-3 py-1 text-xs w-44 md:w-56 outline-none focus:bg-white/20 focus-visible:ring-2 focus-visible:ring-mint"
       />
       {open && results.length > 0 && (
-        <div className="absolute right-0 mt-2 w-72 bg-white text-slate-800 rounded-xl shadow-xl border border-teal-100 overflow-hidden z-50">
+        <div id="site-search-results" role="listbox" aria-label="Search results" className="absolute right-0 mt-2 w-72 bg-white text-slate-800 rounded-xl shadow-xl border border-teal-100 overflow-hidden z-50">
           {results.map((r, i) => (
             <Link key={i} href={r.href} className="block px-3 py-2 text-xs hover:bg-teal-50 border-b border-teal-50 last:border-0">
               <span className="font-bold text-teal-700">[{r.type}]</span> <b>{r.title}</b> <span className="text-slate-400">{r.sub}</span>
