@@ -31,26 +31,38 @@ export default function Admin() {
   const [polls, setPolls] = useState([]);
   const [subs, setSubs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const loadAll = async () => {
+  async function fetchJson(path, fallback) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 8000);
     try {
-      const [e, n, o] = await Promise.all([
-        fetch("/api/events").then((r) => r.json()),
-        fetch("/api/announcements").then((r) => r.json()),
-        fetch("/api/orgs").then((r) => r.json()),
-      ]);
-      setEvents(e.events || []); setNews(n.announcements || []); setOrgs(o.orgs || []);
-      const g = await fetch("/api/gallery").then((r) => r.json()).catch(() => ({}));
-      setGallery(g.gallery || []);
-      const rv = await fetch("/api/rsvp").then((r) => (r.ok ? r.json() : { rsvps: [] })).catch(() => ({ rsvps: [] }));
-      setRsvps(rv.rsvps || []);
-      const ib = await fetch("/api/contact").then((r) => (r.ok ? r.json() : { contacts: [] })).catch(() => ({ contacts: [] }));
-      setInbox(ib.contacts || []);
-      const pl = await fetch("/api/polls").then((r) => r.json()).catch(() => ({}));
-      setPolls(pl.polls || []);
-      const sb = await fetch("/api/newsletter").then((r) => (r.ok ? r.json() : { subscribers: [] })).catch(() => ({ subscribers: [] }));
-      setSubs(sb.subscribers || []);
-    } catch (err) { toast("Load failed", true); }
-    finally { setLoading(false); }
+      const r = await fetch(path, { signal: ctrl.signal });
+      if (!r.ok) return { data: fallback, ok: false };
+      return { data: await r.json().catch(() => fallback), ok: true };
+    } catch {
+      return { data: fallback, ok: false };
+    } finally {
+      clearTimeout(t);
+    }
+  }
+  const loadAll = async () => {
+    const [e, n, o, g, rv, ib, pl, sb] = await Promise.all([
+      fetchJson("/api/events", { events: [] }),
+      fetchJson("/api/announcements", { announcements: [] }),
+      fetchJson("/api/orgs", { orgs: [] }),
+      fetchJson("/api/gallery", { gallery: [] }),
+      fetchJson("/api/rsvp", { rsvps: [] }),
+      fetchJson("/api/contact", { contacts: [] }),
+      fetchJson("/api/polls", { polls: [] }),
+      fetchJson("/api/newsletter", { subscribers: [] }),
+    ]);
+    setEvents(e.data.events || []); setNews(n.data.announcements || []); setOrgs(o.data.orgs || []);
+    setGallery(g.data.gallery || []);
+    setRsvps(rv.data.rsvps || []);
+    setInbox(ib.data.contacts || []);
+    setPolls(pl.data.polls || []);
+    setSubs(sb.data.subscribers || []);
+    if ([e, n, o, g, rv, ib, pl, sb].some((r) => !r.ok)) toast("Some sections were slow — showing partial data", true);
+    setLoading(false);
   };
   useEffect(() => {
     loadAll();
